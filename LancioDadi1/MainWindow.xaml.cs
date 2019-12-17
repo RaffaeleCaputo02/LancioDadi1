@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,9 +21,38 @@ namespace LancioDadi1
     /// </summary>
     public partial class MainWindow : Window
     {
+        Random rnd = new Random();
+
         public MainWindow()
         {
             InitializeComponent();
+            
+        }
+
+        private void Brn_Lancia_Click(object sender, RoutedEventArgs e)
+        {
+            var dado1 = Task.Factory.StartNew(Lancio);
+
+            var dado2 = Task.Factory.StartNew(Lancio);
+
+            var somma=Dispatcher.Invoke(() => Somma(dado1.Result, dado2.Result));
+            
+
+            Lbl_Risultato.Content = $"La somma dei dadi è {somma}";
+        }
+
+        public int Lancio()
+        {
+            return rnd.Next(1, 7);
+           
+        }
+
+        
+
+        private static int Somma(int dado1, int dado2)
+        {
+            
+            return dado1+dado2;
         }
     }
 }
